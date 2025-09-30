@@ -1,11 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainPanel : MonoBehaviour
 {
     UserData currentUser = UserManager.Instance.CurrentUser;
 
     public TMP_Text welcomeText;
+    public Button logoutButton;
 
     void Start()
     {
@@ -17,5 +20,13 @@ public class MainPanel : MonoBehaviour
         {
             welcomeText.text = "No login information available.";
         }
+
+        logoutButton.onClick.AddListener(OnLogoutButtonClick);
+    }
+
+    public void OnLogoutButtonClick()
+    {
+        UserManager.Instance.Logout();
+        SceneManager.LoadScene("LoginScene");
     }
 }

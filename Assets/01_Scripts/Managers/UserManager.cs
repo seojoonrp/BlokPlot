@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class UserData
@@ -33,5 +34,10 @@ public class UserManager : MonoBehaviour
     public void SetCurrentUser(UserData user)
     {
         CurrentUser = user;
+    }
+
+    public void Logout()
+    {
+        CurrentUser = null;
     }
 }
