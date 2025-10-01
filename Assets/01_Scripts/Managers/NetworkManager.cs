@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text logText;
     [SerializeField] private TMP_InputField messageInput;
+    [SerializeField] private Button connectButton;
     [SerializeField] private Button sendButton;
 
     private WebSocket ws;
@@ -15,11 +16,18 @@ public class NetworkManager : MonoBehaviour
     void Start()
     {
         logText.text = "";
+        connectButton.onClick.AddListener(ConnectToServer);
         sendButton.onClick.AddListener(OnSendButtonClick);
     }
 
     private void ConnectToServer()
     {
+        if (ws != null && ws.IsAlive)
+        {
+            Debug.Log("Already connected.");
+            return;
+        }
+
         ws = new("ws://localhost:8080/ws");
 
         ws.OnOpen += (sender, e) =>
@@ -28,6 +36,8 @@ public class NetworkManager : MonoBehaviour
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 logText.text += "\nServer Connected!";
+                connectButton.interactable = false;
+                sendButton.interactable = true;
             });
         };
 
@@ -56,6 +66,8 @@ public class NetworkManager : MonoBehaviour
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 logText.text += "\nConnection Closed.";
+                connectButton.interactable = true;
+                sendButton.interactable = false;
             });
         };
 
